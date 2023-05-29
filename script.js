@@ -15,6 +15,9 @@ let secretNumber = Math.trunc(Math.random() * 20) + 1;
 // Game screen
 document.querySelector('.question').textContent = '???';
 
+// Best score
+let highscore = 0;
+
 // Game points
 let score = 20;
 
@@ -37,8 +40,10 @@ document.querySelector('.check').addEventListener('click', function () {
       document.querySelector('body').style.backgroundColor = 'rgb(9, 250, 21)';
       document.querySelector('.question').style.width = '50rem';
 
-      // Best score
-      document.querySelector('.highscore').innerHTML = score;
+      if (score > highscore) {
+        document.querySelector('.highscore').textContent = score;
+        highscore = score;
+      }
 
       // Too high
     } else if (guessingNumber > secretNumber) {
@@ -60,6 +65,7 @@ document.querySelector('.check').addEventListener('click', function () {
   }
 });
 
+// Reset function
 document.querySelector('.again').addEventListener('click', function () {
   secretNumber = Math.trunc(Math.random() * 20) + 1;
   score = 20;
