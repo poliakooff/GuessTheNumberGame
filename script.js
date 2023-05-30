@@ -11,70 +11,83 @@
 // };
 
 let secretNumber = Math.trunc(Math.random() * 20) + 1;
-
-// Game screen
-document.querySelector('.question').textContent = '???';
-
-// Best score
 let highscore = 0;
-
-// Game points
 let score = 20;
+
+const displayGuessMessage = function (message) {
+  document.querySelector('.guess-message').textContent = message;
+};
+const changeColorBody = function (color) {
+  document.querySelector('body').style.backgroundColor = color;
+};
+const questionText = function (text) {
+  document.querySelector('.question').textContent = text;
+};
+const questionBlockWidth = function (width) {
+  document.querySelector('.question').style.width = width;
+};
+const numberInput = function (value) {
+  document.querySelector('.number-input').value = value;
+};
+const highscoreChangeScore = function (number) {
+  document.querySelector('.highscore').textContent = number;
+};
+const scoreText = function (text) {
+  document.querySelector('.score').textContent = text;
+};
 
 // Game functionality
 document.querySelector('.check').addEventListener('click', function () {
   const guessingNumber = Number(document.querySelector('.number-input').value);
   console.log(guessingNumber, typeof guessingNumber);
 
-  // Game end
+  // Ending the game if the score is over
   if (score > 1) {
     // No input
     if (!guessingNumber) {
-      document.querySelector('.guess-message').textContent = 'Введите число!';
-      document.querySelector('body').style = 'rgb(0, 0, 0)';
+      displayGuessMessage('Введите число!');
+      changeColorBody('rgb(0, 0, 0)');
 
       // Play won
     } else if (guessingNumber === secretNumber) {
-      document.querySelector('.guess-message').textContent = 'Правильно!';
-      document.querySelector('.question').textContent = secretNumber;
-      document.querySelector('body').style.backgroundColor = 'rgb(9, 250, 21)';
-      document.querySelector('.question').style.width = '50rem';
+      displayGuessMessage('Правильно!');
+      questionText(secretNumber);
+      questionBlockWidth('50rem');
+      changeColorBody('rgb(9, 250, 21)');
 
+      // The best result gets better if it is better.
       if (score > highscore) {
-        document.querySelector('.highscore').textContent = score;
+        highscoreChangeScore(score);
         highscore = score;
       }
 
-      // Too high
-    } else if (guessingNumber > secretNumber) {
-      document.querySelector('.guess-message').textContent = 'Сильшком много!';
-      document.querySelector('body').style = 'rgb(0, 0, 0)';
-      score--;
-      document.querySelector('.score').textContent = score;
+      // Number from input is wrong
+    } else if (guessingNumber !== secretNumber) {
+      displayGuessMessage(
+        guessingNumber > secretNumber ? 'Сильшком много!' : 'Сильшком мало!'
+      );
 
-      // Too low
-    } else if (guessingNumber < secretNumber) {
-      document.querySelector('.guess-message').textContent = 'Сильшком мало!';
-      document.querySelector('body').style = 'rgb(0, 0, 0)';
       score--;
-      document.querySelector('.score').textContent = score;
+      scoreText(score);
+      document.querySelector('body').style = 'rgb(0, 0, 0)';
     }
   } else {
-    document.querySelector('.guess-message').textContent = 'Game over!';
-    document.querySelector('.score').textContent = 0;
+    displayGuessMessage('Game over!');
+    scoreText(0);
   }
 });
 
 // Reset function
-document.querySelector('.again').addEventListener('click', function () {
+const againButton = document.querySelector('.again');
+
+const reset = againButton.addEventListener('click', function () {
   secretNumber = Math.trunc(Math.random() * 20) + 1;
   score = 20;
 
-  document.querySelector('body').style.backgroundColor = 'rgb(0, 0, 0)';
-  document.querySelector('.question').textContent = '???';
-  document.querySelector('.question').style.width = '25rem';
-  document.querySelector('.number-input').value = '';
-  document.querySelector('.guess-message').textContent = 'Начни угадывать!';
-  document.querySelector('.score').textContent = score;
-  //   document.querySelector('.highscore').textContent = '0';
+  changeColorBody('rgb(0, 0, 0)');
+  questionText('???');
+  questionBlockWidth('25rem');
+  numberInput('');
+  displayGuessMessage('Начни угадывать!');
+  scoreText(score);
 });
